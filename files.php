@@ -6,9 +6,9 @@ $file_map = array(
 		file => 'index.html',
 		type => 'htmlmixed'
 	),
-	'style' => array(
+	'styles' => array(
 		file => 'less/style.less',
-		type => 'less',
+		type => "text/x-less",
 	),
 	'global' => array(
 		file => 'js/global.js',
@@ -32,7 +32,10 @@ if (in_array($request, array_keys($file_map))) {
 	$contents = fread($myfile,filesize($path.$file_map[$request]["file"]));
 	fclose($myfile);
 
-	echo json_encode(array(contents => $contents));
+	echo json_encode(array(
+		content => $contents,
+		mode => $file_map[$request]["type"]
+	));
 
 } else {
 

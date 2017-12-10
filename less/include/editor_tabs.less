@@ -1,0 +1,47 @@
+@tab-height: 30px;
+
+.tabs {
+	background: lighten(#272822, 5%);
+
+	ul {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		height: @tab-height;
+
+		li {
+
+			background: lighten(#272822, 5%);
+			color: #ccc;
+			flex: 1;
+
+			list-style-type: none;
+
+			padding-left: 15px;
+			height: @tab-height;
+
+			font-size: 12px;
+
+			line-height: 2.4;
+
+			&.active {
+
+				position: relative;
+				background: #272822;
+				border-bottom: 1px solid lighten(#272822, 1%);
+				color: #fff;
+
+				&:after {
+					content: "•";
+					color: #00c0ff;
+					position: absolute;
+					right: 4px;
+					top: 0;
+					height: 2px;
+					font-size: 33px;
+					line-height: 1;
+				}
+			}
+		}
+	}
+}

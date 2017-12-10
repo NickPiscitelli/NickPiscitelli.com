@@ -10,133 +10,56 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <nav id="mainNav" class="mainNav">
-      <div class="icon">
-        <img src="img/terminal.svg" height="30" alt="Terminal Logo">
+  <nav id="mainNav" class="mainNav">
+    <div class="icon">
+      <img src="img/terminal.svg" height="30" alt="Terminal Logo">
+    </div>
+    <div class="nameType">
+      <div id="nameType"></div>
+    </div>
+    <div class="fastForwardContain">
+      <button type="button" class="fast-forward" title="Complete Typing Animation">
+      <svg>
+        <path d="M3.339 6l13.979 10-13.979 10z"></path>
+        <path d="M17.317 6l13.979 10-13.979 10z"></path>
+      </svg>
+      </button>
+    </div>
+    <div class="themePicker">
+      <select name="theme-picker">
+
+      </select>
+    </div>
+  </nav>
+
+  <section class="code">
+    <div class="editor left fl">
+      <div id="leftCode" class="left fl "></div>
+    </div>
+    <div class="editor right fr">
+      <div class="tabs">
+        <ul>
+          <li class="active">index.html</li>
+          <li>styles.less</li>
+          <li>global.js</li>
+        </ul>
       </div>
-      <div class="nameType">
-        <div id="nameType"></div>
-      </div>
-      <div class="fastForwardContain">
-        <button type="button" class="fast-forward" title="Complete Typing Animation">
-        <svg>
-          <path d="M3.339 6l13.979 10-13.979 10z"></path>
-          <path d="M17.317 6l13.979 10-13.979 10z"></path>
-        </svg>
-        </button>
-      </div>
-      <div class="themePicker">
-        <select name="theme-picker">
+      <div id="rightCode"></div>
+    </div>
+  </section>
 
-        </select>
-      </div>
-    </nav>
+  <!-- Look Mom! No jQuery! -->
+  <script src="js/codemirror/lib/codemirror.js"></script>
+  <script src="js/codemirror/addon/scroll/simplescrollbars.js"></script>
+  <script src="js/codemirror/mode/javascript/javascript.js"></script>
+  <script src="js/codemirror/mode/javascript/javascript.js"></script>
+  <script src="js/codemirror/mode/css/css.js"></script>
+  <script src="js/codemirror/mode/xml/xml.js"></script>
+  <script src="js/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+  <script src="js/global.js"></script>
 
-    <section class="code">
-      <div class="editor left fl">
-        <div id="leftCode" class="left fl "></div>
-      </div>
-      <div class="editor right fr">
-        <div class="tabs">
-          <ul>
-            <li class="active">index.html</li>
-            <li>styles.less</li>
-            <li>global.js</li>
-          </ul>
-        </div>
-        <div id="rightCode"></div>
-      </div>
-    </section>
-
-    <!-- Look Mom! No jQuery! -->
-    <script src="js/codemirror/lib/codemirror.js"></script>
-    <script src="js/codemirror/addon/scroll/simplescrollbars.js"></script>
-    <script src="js/codemirror/mode/javascript/javascript.js"></script>
-    <script src="js/codemirror/mode/javascript/javascript.js"></script>
-    <script src="js/codemirror/mode/css/css.js"></script>
-    <script src="js/codemirror/mode/xml/xml.js"></script>
-    <script src="js/codemirror/mode/htmlmixed/htmlmixed.js"></script>
-    <script src="js/global.js"></script>
-
-<div id="leftCodeContent" class="codeContent">
-// Welcome!
-// I'm Nick Piscitelli (Picky Knee) and this my website!
-// Check out the source code on the right!
-// Check out my full resume at:
-// E-mail Address: mail@nickpiscitelli.com
-
-// Who am I?
-var pickyKnee = new Person({
-  firstName: "Nicholas",
-  lastName: "Piscitelli",
-  middleInitial: "C"
-});
-
-pickyKnee.setOccupation("Full Stack Web Developer");
-
-pickyKnee.setObjective("Obtain a challenging and motivating position.")
-
-pickyKnee.setLanguages([
-  {
-    name: "JavaScript",
-    mastery: "Ninja",
-    experience: new Years(7)
-  },
-  {
-    name: "Perl",
-    mastery: "Monk",
-    experience: new Years(9)
-  },
-  {
-    name: "PHP",
-    mastery: "Reluctant Assassin",
-    experience: new Years(9)
-  },
-  {
-    name: "Node.js",
-    mastery: "Aspiring Warrior",
-    experience: new Years(4)
-  },
-  {
-    name: "C#",
-    mastery: "Rusty Anchor",
-    experience: new Years(11)
-  }
-]);
-
-pickyKnee.setOperatingSystems([
-  "Linux",
-  "Windows",
-  "Android",
-  "Mac OSX",
-  "iOS"
-])
-
-pickyKnee.setDataStores([
-  "MySQL",
-  "SQL Server",
-  "SQLite",
-  "Memcache",
-  "Redis",
-  "MongoDB"
-]);
-
-pickyKnee.setHobbies([
-  "Reading",
-  "Learning",
-  "Digital Currencies",
-  "Clash Royale",
-  "Working Out",
-  "Playing with my dogs"
-]);
-
-pickyKnee.run();
-
-</div>
-
-<div id="rightCodeContent" class="codeContent">
-
-</div>
+  <div id="leftCodeContent" class="codeContent"></div>
+  <div id="rightCodeContent" class="codeContent"></div>
 
 </body>
 </html>

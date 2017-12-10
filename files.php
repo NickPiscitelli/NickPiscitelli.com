@@ -13,6 +13,10 @@ $file_map = array(
 	'global' => array(
 		file => 'js/global.js',
 		type => 'javascript',
+	),
+	'resume' => array(
+		file => 'js/resume.js',
+		type => 'javascript',
 	)
 );
 

@@ -83,15 +83,24 @@ ready(function(){
   
   typeInterval = setInterval(typeName, 250);
 
+
+
   var $leftCode = $('#leftCode');
   $leftCode['codeMirror'] = CodeMirror($leftCode, {
-    value: $('#leftCodeContent').innerHTML,
     mode:  "javascript",
     theme: "monokai",
     lineNumbers: true,
     scrollbarStyle: "overlay"
   });
   $leftCode['codeMirror'].setSize((vp.w / 2) - gutterWidth - scrollWidth, vp.h - $mainNav.offsetHeight)
+
+  ajax({
+    url: 'files.php?file=resume',
+    success: function(data){
+      data = JSON.parse(data);
+      $('#leftCode')['codeMirror'].setValue(data['content']);
+    }
+  });
 
   var $rightCode = $('#rightCode');
   var html = $('html').cloneNode(true);

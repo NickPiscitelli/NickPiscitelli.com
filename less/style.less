@@ -1,0 +1,100 @@
+@import 'include/reset.less';
+@import 'include/clearfix.less';
+@import 'include/helpers.less';
+@import (css) '../js/codemirror/addon/scroll/simplescrollbars.css';
+
+html, body {
+	font-family: 'Roboto Mono', monospace;
+	background: #fafafa;
+	color: #333;
+	margin: 0;
+	padding: 0;
+}
+
+.CodeMirror {
+	line-height: 1.3;
+
+	&.cm-s-default {
+		background: #fafafa;
+	}
+}
+
+// Hacker Type (L33t H4x0R)
+.cm-s-monokai span.cm-comment {
+	color: #090;
+}
+.cm-s-monokai span.cm-variable {
+	color: lightblue;
+}
+
+.mainNav {
+	-webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: flex;
+  cursor: default;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  height: 40px;
+  overflow-y: visible;
+  padding: 8px 14px;
+  -webkit-user-select: none;
+  -webkit-box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);
+  box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);
+}
+
+section.code {
+	background: #000;
+}
+
+select[name="theme-picker"],
+select[name="theme-picker"] option {
+	text-transform: capitalize;
+}
+
+.codeContent {
+	display: none;
+}
+
+.nameType {
+	background: #fafafa;
+	flex: 1;
+}
+
+.fastForwardContain {
+	display: flex;
+	flex: 1;
+}
+
+.fastForwardContain button {
+	background: #fafafa;
+  border: none;
+  cursor: pointer;
+  fill: #424242;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  width: 40px;
+  flex: 1;
+}
+
+.cm-s-monokai{
+
+	// Rail 
+	.CodeMirror-overlayscroll-vertical,
+	.CodeMirror-overlayscroll-horizontal {
+		background: darken(#272822, 5%);
+		  -webkit-box-shadow: 10px 0 5px -2px #888;
+          box-shadow: 10px 0 5px -2px #888;
+	}
+
+	// Scroll Element
+	.CodeMirror-overlayscroll-horizontal div,
+	.CodeMirror-overlayscroll-vertical div {
+		border-radius: 0;
+		background: lighten(#272822, 5%);
+	}
+
+}

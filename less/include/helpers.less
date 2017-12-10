@@ -1,0 +1,402 @@
+// Colors
+@error-color: #f30000;
+@valid-color: yellowgreen;
+
+// Screen Sizes (min)
+@screen-xs-min: 480px;
+@screen-sm-min: 768px;
+@screen-md-min: 992px;
+@screen-lg-min: 1200px;
+
+// Screen Sizes (max)
+@screen-xs-max: (@screen-sm-min - 1);
+@screen-sm-max: (@screen-md-min - 1);
+@screen-md-max: (@screen-lg-min - 1);
+
+
+// Font Sizes
+@font-xxxxs: .8rem;
+@font-xxxs: .9rem;
+@font-xxs: 1rem;
+@font-xs: 1.1rem;
+@font-sm: 1.2rem;
+@font-base: 1.3rem;
+@font-lg: 1.4rem;
+@font-xl: 1.5rem;
+@font-xxl: 1.6rem;
+@font-xxxl: 2rem;
+@font-xxxxl: 2.5rem;
+@font-xxxxxl: 3rem;
+
+.clear {
+  clear: both;
+}
+.clear-xs {
+  clear: both;
+  @media(min-width: @screen-sm-min){
+    clear: none;
+  }
+}
+.clear-sm {
+  clear: none;
+  @media(min-width: @screen-sm-min) and (max-width: @screen-md-min){
+    clear: both;
+  }
+}
+.clear-md {
+  clear: none;
+  @media(min-width: @screen-md-min) and (max-width: @screen-lg-min){
+    clear: both;
+  }
+}
+.clear-lg {
+  clear: none;
+  @media(min-width: @screen-lg-min){
+    clear: both;
+  }
+}
+
+.thick {
+  font-family: 'Heebo', "Arial Black", sans-serif;
+  font-weight: 900;
+}
+
+.thin {
+  font-family: 'Questrial', "Lucida Console", Helvetica, sans-serif;
+  font-weight: 400;
+}
+
+.ellipsis{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.rb, .removeBox, .noBox {
+  margin: 0;
+  padding: 0;
+}
+.rm, .noMargin {
+  margin: 0;
+}
+.rp, .noPad {
+  padding: 0;
+}
+
+@screen : @screen-xs-min, @screen-sm-min, @screen-md-min, @screen-lg-min;
+@sizes  : xs, sm, md, lg;
+.createMediaQueryRules(@mediaIterator:1) when (@mediaIterator <= length(@screen))
+{
+    @mediaQuery : extract(extract(@screen, @mediaIterator), 1);
+    @size : extract(extract(@sizes, @mediaIterator), 1);
+
+    @media (min-width : @mediaQuery)
+    {
+        .rb-@{size} {
+          .removeBox();
+        }
+        .rm-@{size} {
+          margin: 0;
+        }
+        .rp-@{size} {
+          padding: 0;
+        }
+        .rb-@{size}-i {
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        .rm-@{size}-i {
+          margin: 0 !important;
+        }
+        .rp-@{size}-i {
+          padding: 0 !important;
+        }
+    }
+
+    .createMediaQueryRules((@mediaIterator + 1));
+}
+.createMediaQueryRules();
+
+
+
+.centerText { 
+  text-align: center
+}
+.centerContent {
+    margin: 0 auto;
+    float: none;
+}
+.centerBox { 
+  margin-left: auto; 
+  margin-right: auto;
+}
+.center {
+  .centerBox;
+  .centerText;
+}
+
+/* Buttons */
+.btn {
+  padding: 0;
+  -webkit-transition: color .4s, border-color .4s, background .4s;
+  transition: color .4s, border-color .4s, background .4s;
+  & > p { 
+    margin: 0;
+    padding: 0;
+  }
+  & > p:hover, & > p > a:hover {
+    text-decoration: none;
+  }
+  & > p > a, & > p > span {
+    display: block;
+    padding: 12px 7px;
+  }
+}
+
+/* Conveneince Classes */
+.fl { 
+  float: left;
+}
+.fr { 
+  float: right; 
+}
+.nf, .titanic {
+  float: none; 
+}
+.it {
+  font-style: italic;
+}
+.bold {
+  font-weight: bold;
+}
+.strike {
+  text-decoration: line-through;
+}
+.ib {
+  display: inline-block;
+}
+.block { display: block; }
+.inline {
+	display: inline;
+}
+.uc {
+  text-transform: uppercase;
+}
+.ra {
+  text-align: right;
+}
+.la {
+  text-align: left;
+}
+.normal {
+  font-weight: normal;
+}
+.rel {
+  position: relative;
+}
+.underline, .und {
+  text-decoration: underline;
+}
+.noDecoration{
+  text-decoration: none;
+}
+.error {
+  color: @error-color;
+}
+
+
+.error {
+  color: @error-color;
+}
+.valid, .success {
+  color: @valid-color;
+}
+.font-xxxs {
+  font-size: @font-xxxs;
+}
+.font-xxs {
+  font-size: @font-xxs;
+}
+.font-xs {
+  font-size: @font-xs;
+}
+.font-sm {
+  font-size: @font-sm;
+}
+.font-base, .font-md {
+  font-size: @font-base;
+}
+.font-lg {
+  font-size: @font-lg;
+}
+.font-xl {
+  font-size: @font-xl;
+}
+.font-xxl {
+  font-size: @font-xxl;
+}
+.font-xxxl, .font-jumbo {
+  font-size: @font-xxxl;
+}
+.font-xxxxl, .font-showcase {
+  font-size: @font-xxxxl;
+}
+.font-xxxxxl, .font-showcase.large {
+  font-size: @font-xxxxxl;
+}
+@media(max-width: @screen-xs-max){
+  .font-xs-xs {
+    font-size: @font-xs;
+  }
+  .font-sm-xs {
+    font-size: @font-sm;
+  }
+  .font-base-xs {
+    font-size: @font-base;
+  }
+  .font-lg-xs {
+    font-size: @font-lg;
+  }
+  .font-xl-xs {
+    font-size: @font-xl;
+  }
+  .font-jumbo-xs {
+    font-size: @font-xxxl;
+  }
+  .font-xs-xs-i {
+    font-size: @font-xs !important;
+  }
+  .font-sm-xs-i {
+    font-size: @font-sm !important;
+  }
+  .font-base-xs-i {
+    font-size: @font-base !important;
+  }
+  .font-lg-xs-i {
+    font-size: @font-lg !important;
+  }
+  .font-xl-xs-i {
+    font-size: @font-xl !important;
+  }
+  .font-jumbo-xs-i {
+    font-size: @font-xxxl !important;
+  } 
+}
+@media(min-width: @screen-sm-min){
+  .font-xs-sm {
+    font-size: @font-xs;
+  }
+  .font-sm-sm {
+    font-size: @font-sm;
+  }
+  .font-base-sm {
+    font-size: @font-base;
+  }
+  .font-lg-sm {
+    font-size: @font-lg;
+  }
+  .font-xl-sm {
+    font-size: @font-xl;
+  }
+  .font-jumbo-sm {
+    font-size: @font-xxxl;
+  }
+  .font-xs-sm-i {
+    font-size: @font-xs !important;
+  }
+  .font-sm-sm-i {
+    font-size: @font-sm !important;
+  }
+  .font-base-sm-i {
+    font-size: @font-base !important;
+  }
+  .font-lg-sm-i {
+    font-size: @font-lg !important;
+  }
+  .font-xl-sm-i {
+    font-size: @font-xl !important;
+  }
+  .font-jumbo-sm-i {
+    font-size: @font-xxxl !important;
+  } 
+}
+@media(min-width: @screen-md-min){
+  .font-xs-md {
+    font-size: @font-xs;
+  }
+  .font-sm-md {
+    font-size: @font-sm;
+  }
+  .font-base-md {
+    font-size: @font-base;
+  }
+  .font-lg-md {
+    font-size: @font-lg;
+  }
+  .font-xl-md {
+    font-size: @font-xl;
+  }
+  .font-jumbo-md {
+    font-size: @font-xxxl;
+  }
+  .font-xs-md-i {
+    font-size: @font-xs !important;
+  }
+  .font-sm-md-i {
+    font-size: @font-sm !important;
+  }
+  .font-base-md-i {
+    font-size: @font-base !important;
+  }
+  .font-lg-md-i {
+    font-size: @font-lg !important;
+  }
+  .font-xl-md-i {
+    font-size: @font-xl !important;
+  }
+  .font-jumbo-md-i {
+    font-size: @font-xxxl !important;
+  } 
+}
+@media(min-width: @screen-lg-min){
+  .font-xs-lg {
+    font-size: @font-xs;
+  }
+  .font-sm-lg {
+    font-size: @font-sm;
+  }
+  .font-base-lg {
+    font-size: @font-base;
+  }
+  .font-lg-lg {
+    font-size: @font-lg;
+  }
+  .font-xl-lg {
+    font-size: @font-xl;
+  }
+  .font-xxl-lg {
+		font-size: @font-xxl;
+  }
+  .font-jumbo-lg {
+    font-size: @font-xxxl;
+  }
+  .font-xs-lg-i {
+    font-size: @font-xs !important;
+  }
+  .font-sm-lg-i {
+    font-size: @font-sm !important;
+  }
+  .font-base-lg-i {
+    font-size: @font-base !important;
+  }
+  .font-lg-lg-i {
+    font-size: @font-lg !important;
+  }
+  .font-xl-lg-i {
+    font-size: @font-xl !important;
+  }
+  .font-jumbo-lg-i {
+    font-size: @font-xxxl !important;
+  } 
+}
+

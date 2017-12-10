@@ -1,0 +1,299 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Nick Piscitelli - Web Developer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="js/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="js/codemirror/theme/monokai.css" id="themeLink">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav id="mainNav" class="mainNav">
+      <div class="icon">
+        <img src="img/terminal.svg" height="30" alt="Terminal Logo">
+      </div>
+      <div class="nameType">
+        <div id="nameType"></div>
+      </div>
+      <div class="fastForwardContain">
+        <button type="button" class="fast-forward" title="Complete Typing Animation">
+        <svg>
+          <path class="path1" d="M3.339 6l13.979 10-13.979 10z"></path>
+          <path class="path2" d="M17.317 6l13.979 10-13.979 10z"></path>
+        </svg>
+        </button>
+      </div>
+      <div class="themePicker">
+        <select name="theme-picker">
+
+        </select>
+      </div>
+    </nav>
+
+    <section class="code">
+      <div id="leftCode" class="left fl ">
+
+      </div>
+      <div id="rightCode" class="right fr">
+
+      </div>
+    </section>
+
+    <!-- Look Mom! No jQuery! -->
+    <script src="js/codemirror/lib/codemirror.js"></script>
+    <script src="js/codemirror/addon/scroll/simplescrollbars.js"></script>
+    <script src="js/codemirror/mode/javascript/javascript.js"></script>
+    <script src="js/codemirror/mode/javascript/javascript.js"></script>
+    <script src="js/codemirror/mode/css/css.js"></script>
+    <script src="js/codemirror/mode/xml/xml.js"></script>
+    <script src="js/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+    <script>
+      var myName = "Nick Piscitelli";
+      var scrollWidth = 5;
+      var gutterWidth = 3.5; // This is half of the width
+      var typeInterval;
+      var selectedTheme = 'monokai';
+
+      var themes = [
+        "3024-day",
+        "3024-night",
+        "abcdef",
+        "ambiance",
+        "ambiance-mobile",
+        "base16-dark",
+        "base16-light",
+        "bespin",
+        "blackboard",
+        "cobalt",
+        "colorforth",
+        "dracula",
+        "duotone-dark",
+        "duotone-light",
+        "eclipse",
+        "elegant",
+        "erlang-dark",
+        "hopscotch",
+        "icecoder",
+        "isotope",
+        "lesser-dark",
+        "liquibyte",
+        "material",
+        "mbo",
+        "mdn-like",
+        "midnight",
+        "monokai",
+        "neat",
+        "neo",
+        "night",
+        "panda-syntax",
+        "paraiso-dark",
+        "paraiso-light",
+        "pastel-on-dark",
+        "railscasts",
+        "rubyblue",
+        "seti",
+        "solarized",
+        "the-matrix",
+        "tomorrow-night-bright",
+        "tomorrow-night-eighties",
+        "ttcn",
+        "twilight",
+        "vibrant-ink",
+        "xq-dark",
+        "xq-light",
+        "yeti",
+        "zenburn"
+      ];
+
+      var $select = $('select[name="theme-picker"]');
+      for (var i = 0; i < themes.length; ++i){
+        var $option = document.createElement("option");
+        $option.value = themes[i];
+        $option.text = themes[i].replace(/-/g, ' ');
+        if (themes[i] === selectedTheme){
+          $option.selected = "selected";
+        }
+        $select.add($option)
+      }
+      // Set active theme as selected
+      $select.value = selectedTheme;
+
+      ready(function(){
+
+        var vp = viewport();
+        var $mainNav = $('#mainNav');
+
+        var $firstName = $('#nameType');
+        $firstName['codeMirror'] = CodeMirror($firstName, {
+          mode:  "javascript",
+        });
+        $firstName['codeMirror'].setSize(200, 25);
+
+        
+        typeInterval = setInterval(typeName, 250);
+
+        var $leftCode = $('#leftCode');
+        $leftCode['codeMirror'] = CodeMirror($leftCode, {
+          value: $('#leftCodeContent').innerHTML,
+          mode:  "javascript",
+          theme: "monokai",
+          lineNumbers: true,
+          scrollbarStyle: "overlay"
+        });
+        $leftCode['codeMirror'].setSize((vp.w / 2) - gutterWidth - scrollWidth, vp.h - $mainNav.offsetHeight)
+
+        var $rightCode = $('#rightCode');
+        var html = $('html').cloneNode(true);
+        html.querySelector('#leftCode').innerHTML = '';
+        html.querySelector('#rightCode').innerHTML = '';
+        html.querySelector('#nameType').innerHTML = '';
+        html = html.outerHTML;
+        html = html.replace('<style></style></head>', '</head>');
+        html = html.replace('<html><head>', '<html>\n<head>');
+        $rightCode['codeMirror'] = CodeMirror($rightCode, {
+          value: html,
+          mode:  "htmlmixed",
+          htmlMode: true,
+          theme: "monokai",
+          lineNumbers: true,
+          scrollbarStyle: "overlay"
+        });
+
+        $rightCode['codeMirror'].setSize((vp.w / 2) - gutterWidth - scrollWidth, vp.h - $mainNav.offsetHeight)
+
+        $("select[name='theme-picker']").addEventListener('change',function(e){
+          var $link = $('#themeLink'),
+              href = $link.href;
+
+          $link.href = href.replace(new RegExp(selectedTheme), this.value);
+
+          selectedTheme = this.value;
+          $('#leftCode')['codeMirror'].setOption("theme", selectedTheme);
+          $('#rightCode')['codeMirror'].setOption("theme", selectedTheme);
+        });
+
+      });
+
+      function typeName(){
+        var editor = $('#nameType')['codeMirror'];
+        editor['nameIndex'] = editor['nameIndex'] || 0;
+        var index = editor['nameIndex']++;
+        if (index + 1 <= myName.length){
+          editor.setValue(editor.getValue() + myName[index]);
+        }
+        else {
+          editor.focus();
+          editor.setCursor({
+            line: 1,
+            ch: myName.length + 1
+          });
+          clearInterval(typeInterval);
+        }
+      }
+
+      function ready(fn) {
+        if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading"){
+          fn();
+        } else {
+          document.addEventListener('DOMContentLoaded', fn);
+        }
+      }
+
+      
+
+      function $(query){
+        return document.querySelector(query)
+      }
+
+      function viewport(){
+        return {
+          w: Math.max(document.documentElement.clientWidth, window.innerWidth || 0),
+          h: Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
+        };
+      }
+    </script>
+
+<div id="leftCodeContent" class="codeContent">
+// Welcome!
+// I'm Nick Piscitelli (Picky Knee) and this my website!
+// Check out the source code on the right!
+// Check out my full resume at:
+// E-mail Address: mail@nickpiscitelli.com
+
+// Who am I?
+var pickyKnee = new Person({
+  firstName: "Nicholas",
+  lastName: "Piscitelli",
+  middleInitial: "C"
+});
+
+pickyKnee.setOccupation("Full Stack Web Developer");
+
+pickyKnee.setObjective("Obtain a challenging and motivating position.")
+
+pickyKnee.setLanguages([
+  {
+    name: "JavaScript",
+    mastery: "Ninja",
+    experience: new Years(7)
+  },
+  {
+    name: "Perl",
+    mastery: "Monk",
+    experience: new Years(9)
+  },
+  {
+    name: "PHP",
+    mastery: "Reluctant Assassin",
+    experience: new Years(9)
+  },
+  {
+    name: "Node.js",
+    mastery: "Aspiring Warrior",
+    experience: new Years(4)
+  },
+  {
+    name: "C#",
+    mastery: "Rusty Anchor",
+    experience: new Years(11)
+  }
+]);
+
+pickyKnee.setOperatingSystems([
+  "Linux",
+  "Windows",
+  "Android",
+  "Mac OSX",
+  "iOS"
+])
+
+pickyKnee.setDataStores([
+  "MySQL",
+  "SQL Server",
+  "SQLite",
+  "Memcache",
+  "Redis",
+  "MongoDB"
+]);
+
+pickyKnee.setHobbies([
+  "Reading",
+  "Learning",
+  "Digital Currencies",
+  "Clash Royale",
+  "Working Out",
+  "Playing with my dogs"
+]);
+
+pickyKnee.run();
+
+</div>
+
+<div id="rightCodeContent" class="codeContent">
+
+</div>
+
+</body>
+</html>

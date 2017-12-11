@@ -1,7 +1,7 @@
 // Welcome!
 // I'm Nick Piscitelli (Picky Knee) and this my website!
 // It's still a work in progress....
-// Check out some of the source code on the right!
+// Check out some of the source code on the right! (Only on desktop)
 // View the entire source at my Github
 // E-mail Address: mail@nickpiscitelli.com
 

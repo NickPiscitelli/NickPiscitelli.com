@@ -1,2 +1,6 @@
+.well-known/
+.well-known/*
+staging/
+staging/*
 js/codemirror
 js/codemirror/*

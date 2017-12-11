@@ -73,10 +73,6 @@ $select.value =  activeTheme;
 
 ready(function(){
 
-  var
-      viewportDimensions = viewport(),
-      $mainNav = $('#main-nav');
-
   var $firstName = $('#name-type');
   $firstName.CodeMirror = CodeMirror($firstName, {
     mode:  "javascript",
@@ -100,10 +96,6 @@ ready(function(){
     lineNumbers: true,
     scrollbarStyle: "overlay"
   });
-  $leftCode.CodeMirror.setSize(
-    (viewportDimensions.w / 2) - (editorGutterWidth / 2) - scrollWidth,
-    viewportDimensions.h - $mainNav.offsetHeight
-  );
 
   getFile({
     file: 'resume',
@@ -128,11 +120,6 @@ ready(function(){
       $rightCode.CodeMirror.setValue(data.content);
     }
   });
-
-  $rightCode.CodeMirror.setSize(
-    (viewportDimensions.w / 2) - (editorGutterWidth / 2) - scrollWidth,
-    viewportDimensions.h - $mainNav.offsetHeight - $('.tabs').offsetHeight
-  );
 
   $("select[name='theme-picker']").addEventListener('change',function(){
     updateTheme(this.value);
@@ -170,6 +157,9 @@ ready(function(){
     });
   });
 
+  window.addEventListener('resize',resizeCodePads);
+  resizeCodePads();
+  
   //new Siema({
   //  selector: '.siema',
   //  duration: 200,
@@ -352,4 +342,20 @@ function updateTheme(theme){
   setTimeout(function(){
     syncWithTheme();
   }, 0);
+}
+
+function resizeCodePads(){
+
+  var viewportDimensions = viewport(),
+      navHeight = $('#main-nav').offsetHeight
+
+  $('#left-code-pad').CodeMirror.setSize(
+    (viewportDimensions.w / 2) - (editorGutterWidth / 2) - scrollWidth,
+    viewportDimensions.h - navHeight
+  );
+  $('#right-code-pad').CodeMirror.setSize(
+    (viewportDimensions.w / 2) - (editorGutterWidth / 2) - scrollWidth,
+    viewportDimensions.h - navHeight - $('.tabs').offsetHeight
+  );
+
 }

@@ -92,6 +92,7 @@
 
     @media (min-width : @mediaQuery)
     {
+
         .rb-@{size} {
           .removeBox();
         }
@@ -112,6 +113,13 @@
           padding: 0 !important;
         }
     }
+
+    @media (max-width : @mediaQuery){
+      .hidden-@{size} {
+        display: none;
+      }
+    }
+    
 
     .createMediaQueryRules((@mediaIterator + 1));
 }

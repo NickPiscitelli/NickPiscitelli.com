@@ -1,0 +1,96 @@
+.CodeMirror {
+
+	line-height: 1.3;
+
+	-webkit-box-shadow: inset 0 0 10px black;
+  -moz-box-shadow: inset 0 0 10px black;
+  box-shadow: inset 0 0 10px black;
+
+
+	&.cm-s-default {
+		background: transparent;
+	}
+}
+
+// Increase gutter size
+.CodeMirror-linenumber {
+	text-align: center;
+	padding: 0 4px 0 5px;
+}
+
+// General overrides for lighter themes
+.light {
+
+	.CodeMirror {
+	  -webkit-box-shadow: inset 0 0 10px rgba(210,210,210,.8);
+	  -moz-box-shadow: inset 0 0 10px rgba(210,210,210,.8);
+	  box-shadow: inset 0 0 10px rgba(210,210,210,.8);
+	}
+
+	// Override cursor/font for logo
+	.name-type {
+		.CodeMirror-cursor {
+			color: #000;
+			border-left: 1px solid #000;
+		}
+		.CodeMirror .cm-variable {
+			font-size: 20px;
+			color: #000;
+		}
+	}
+
+	// Darken theme selector
+	.theme-picker .input {
+		background: #fafafa;
+		border: 1px solid darken(#fafafa, 2%);
+		color: #333;
+	}
+}
+
+// Logo Text
+.name-type {
+
+	// Set cursor
+	.CodeMirror-cursor {
+		color: #fff;
+		border-left: 1px solid #fff;
+	}
+
+	// Override editor pad rules
+	.CodeMirror {
+	  -webkit-box-shadow: none;
+	  -moz-box-shadow: none;
+	  box-shadow: none;
+
+	  .CodeMirror-scroll {
+			overflow: hidden !important;
+			margin: 0;
+			padding: 0;
+		}
+
+		.cm-variable {
+			font-size: 20px;
+			color: #fff;
+		}
+	}
+}
+
+/* Custom Theme Overrides */
+.cm-s-monokai{
+
+	// Rail 
+	.CodeMirror-overlayscroll-vertical,
+	.CodeMirror-overlayscroll-horizontal {
+		background: darken(#272822, 5%);
+		  -webkit-box-shadow: 10px 0 5px -2px #888;
+          box-shadow: 10px 0 5px -2px #888;
+	}
+
+	// Scroll Element
+	.CodeMirror-overlayscroll-horizontal div,
+	.CodeMirror-overlayscroll-vertical div {
+		border-radius: 0;
+		background: lighten(#272822, 5%);
+	}
+
+}

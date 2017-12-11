@@ -202,6 +202,24 @@ function hackerType(opt){
   }, 250);
 }
 
+function activeBreakpoint(num) {
+  var envs = ['xs', 'sm', 'md', 'lg'];
+
+  var el = document.createElement('div');
+  document.body.appendChild(el)
+
+  for (var i = envs.length - 1; i >= 0; i--) {
+    var env = envs[i];
+
+    el.className = 'hidden-'+env;
+    if (getComputedStyle(el).display === 'none'){
+      el.parentNode.removeChild(el);
+      return num ? i : env;
+    }
+  }
+}
+
+
 function typeLetter(editor, letter){
   var index = editor.nameIndex++;
   if (letter && letter.length){
@@ -350,11 +368,11 @@ function resizeCodePads(){
       navHeight = $('#main-nav').offsetHeight
 
   $('#left-code-pad').CodeMirror.setSize(
-    (viewportDimensions.w / 2) - (editorGutterWidth / 2) - scrollWidth,
+    '100%',//(viewportDimensions.w / 2) - (editorGutterWidth / 2) - scrollWidth,
     viewportDimensions.h - navHeight
   );
   $('#right-code-pad').CodeMirror.setSize(
-    (viewportDimensions.w / 2) - (editorGutterWidth / 2) - scrollWidth,
+    '100%',//(viewportDimensions.w / 2) - (editorGutterWidth / 2) - scrollWidth,
     viewportDimensions.h - navHeight - $('.tabs').offsetHeight
   );
 

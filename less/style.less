@@ -1,8 +1,9 @@
-@import 'include/reset.less';
-@import 'include/clearfix.less';
-@import 'include/helpers.less';
-@import 'include/forms.less';
-@import 'include/editor_tabs.less';
+@import 'include/reset';
+@import 'include/clearfix';
+@import 'include/helpers';
+@import 'include/forms';
+@import 'include/editor-tabs';
+@import 'include/code-mirror-overrides';
 
 html, body {
 	font-family: 'Roboto Mono', monospace;
@@ -10,14 +11,6 @@ html, body {
 	color: #333;
 	margin: 0;
 	padding: 0;
-}
-
-.CodeMirror {
-	line-height: 1.3;
-
-	&.cm-s-default {
-		background: #fafafa;
-	}
 }
 
 .icon {
@@ -29,29 +22,58 @@ html, body {
 	}
 }
 
-// Hacker Type (L33t H4x0R)
-.cm-s-monokai span.cm-comment {
-	color: #090;
-}
-.cm-s-monokai span.cm-variable {
-	color: lightblue;
+.social-icons {
+
+	display: flex;
+	align-items: center;
+
+	& > a {
+
+		flex: 1;
+		width: 20px;
+		height: 20px;
+
+		padding: 0 7px;
+		
+		&.github {
+			background: url(../img/github-white.png) no-repeat 0 0;
+			background-size: 20px 20px;
+			.light & {
+				background: url(../img/github.png) no-repeat 0 0;
+			}
+		}
+
+		&.linked-in {
+			background: url(../img/linkedin-white.png) no-repeat 0 0;
+			background-size: 20px 20px;
+			.light & {
+				background: url(../img/linkedin.png) no-repeat 0 0;
+			}
+		}
+
+	}
 }
 
 .main-nav {
+
+	display: flex;
+
 	-webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  display: flex;
-  cursor: default;
+
   flex-direction: row;
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
+
+  cursor: default;
   height: 40px;
   overflow-y: visible;
   padding: 8px 14px;
   -webkit-user-select: none;
   border-bottom: 1px solid #333;
+
   .light & {
   	border-bottom: 1px solid #f5f5f5;
   }
@@ -59,6 +81,15 @@ html, body {
 
 .editor {
 	width: 50%;
+	float: left;
+	&.right {
+		float: right;
+	}
+
+	@media(max-width: @screen-sm-max){
+		width: 100%;
+		float: none;
+	}
 }
 
 section.code {
@@ -71,80 +102,32 @@ select[name="theme-picker"] option {
 	outline: none;
 }
 
-.code-content {
-	display: none;
-}
-
-.name-type {
-	flex: 1;
-}
-
 .fast-forward-contain {
 	display: flex;
 	flex: 1;
-}
-
-.fast-forward-contain button {
-	background: transparent;
-  border: none;
-  cursor: pointer;
-  fill: #424242;
-  height: 40px;
-  margin: 0;
-  padding: 0;
-  width: 40px;
-  flex: 1;
-}
-
-// Override cursor/font for logo
-.name-type {
-	.CodeMirror-cursor {
-		color: #fff;
-		border-left: 1px solid #fff;
+	button {
+		background: transparent;
+	  border: none;
+	  cursor: pointer;
+	  fill: #424242;
+	  height: 40px;
+	  margin: 0;
+	  padding: 0;
+	  width: 40px;
+	  flex: 1;
 	}
-	.CodeMirror .cm-variable {
-		font-size: 20px;
-		color: #fff;
+	svg {
+		height: 40px;
+		width: 40px;
 	}
 }
 
-// Darken theme selector
+// Theme selector
 .theme-picker .input {
 	background: #2D2D2D;
 	border: 1px solid darken(#2D2D2D, 2%);
 	color: #fff;
-}
-
-
-.CodeMirror {
-  -webkit-box-shadow: inset 0 0 10px black;
-  -moz-box-shadow: inset 0 0 10px black;
-  box-shadow: inset 0 0 10px black;
-}
-
-// General overrides for lighter themes
-.light {
-
-	.CodeMirror {
-	  -webkit-box-shadow: inset 0 0 10px rgba(210,210,210,.8);
-	  -moz-box-shadow: inset 0 0 10px rgba(210,210,210,.8);
-	  box-shadow: inset 0 0 10px rgba(210,210,210,.8);
-	}
-
-	// Override cursor/font for logo
-	.name-type {
-		.CodeMirror-cursor {
-			color: #000;
-			border-left: 1px solid #000;
-		}
-		.CodeMirror .cm-variable {
-			font-size: 20px;
-			color: #000;
-		}
-	}
-
-	// Darken theme selector
-	.theme-picker .input {
+	.light & {
 		background: #fafafa;
 		border: 1px solid darken(#fafafa, 2%);
 		color: #333;
@@ -153,51 +136,5 @@ select[name="theme-picker"] option {
 
 .name-type {
 	margin-top: -12px;
-
-	.CodeMirror .CodeMirror-scroll {
-		overflow: hidden !important;
-		margin: 0;
-		padding: 0;
-	}
-
-	.CodeMirror {
-	  -webkit-box-shadow: none;
-	  -moz-box-shadow: none;
-	  box-shadow: none;
-	}
-}
-
-.CodeMirror.cm-s-default {
-	background: transparent;
-}
-
-.CodeMirror-linenumber {
-	text-align: center;
-	padding: 0 4px 0 5px;
-}
-
-
-
-.cm-s-monokai{
-
-	// Rail 
-	.CodeMirror-overlayscroll-vertical,
-	.CodeMirror-overlayscroll-horizontal {
-		background: darken(#272822, 5%);
-		  -webkit-box-shadow: 10px 0 5px -2px #888;
-          box-shadow: 10px 0 5px -2px #888;
-	}
-
-	// Scroll Element
-	.CodeMirror-overlayscroll-horizontal div,
-	.CodeMirror-overlayscroll-vertical div {
-		border-radius: 0;
-		background: lighten(#272822, 5%);
-	}
-
-}
-
-.fast-forward-contain svg {
-	height: 40px;
-	width: 40px;
+	flex: 1;
 }

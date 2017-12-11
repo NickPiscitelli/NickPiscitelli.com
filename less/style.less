@@ -1,6 +1,7 @@
 @import 'include/reset.less';
 @import 'include/clearfix.less';
 @import 'include/helpers.less';
+@import 'include/forms.less';
 @import 'include/editor_tabs.less';
 
 html, body {
@@ -41,8 +42,10 @@ html, body {
   overflow-y: visible;
   padding: 8px 14px;
   -webkit-user-select: none;
-  -webkit-box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);
-  box-shadow: 0 10px 20px rgba(0,0,0,.19), 0 6px 6px rgba(0,0,0,.23);
+  border-bottom: 1px solid #333;
+  .light & {
+  	border-bottom: 1px solid #f5f5f5;
+  }
 }
 
 .editor {
@@ -56,6 +59,7 @@ section.code {
 select[name="theme-picker"],
 select[name="theme-picker"] option {
 	text-transform: capitalize;
+	outline: none;
 }
 
 .code-content {
@@ -83,12 +87,74 @@ select[name="theme-picker"] option {
   flex: 1;
 }
 
-#name-type .CodeMirror .cm-variable {
-	.light & {
-		color: #000;
-	}
-	.dark & {
+// Override cursor/font for logo
+.name-type {
+	.CodeMirror-cursor {
 		color: #fff;
+		border-left: 1px solid #fff;
+	}
+	.CodeMirror .cm-variable {
+		font-size: 20px;
+		color: #fff;
+	}
+}
+
+// Darken theme selector
+.theme-picker .input {
+	background: #2D2D2D;
+	border: 1px solid darken(#2D2D2D, 2%);
+	color: #fff;
+}
+
+
+.CodeMirror {
+  -webkit-box-shadow: inset 0 0 10px black;
+  -moz-box-shadow: inset 0 0 10px black;
+  box-shadow: inset 0 0 10px black;
+}
+
+// General overrides for lighter themes
+.light {
+
+	.CodeMirror {
+	  -webkit-box-shadow: inset 0 0 10px rgba(210,210,210,.8);
+	  -moz-box-shadow: inset 0 0 10px rgba(210,210,210,.8);
+	  box-shadow: inset 0 0 10px rgba(210,210,210,.8);
+	}
+
+	// Override cursor/font for logo
+	.name-type {
+		.CodeMirror-cursor {
+			color: #000;
+			border-left: 1px solid #000;
+		}
+		.CodeMirror .cm-variable {
+			font-size: 20px;
+			color: #000;
+		}
+	}
+
+	// Darken theme selector
+	.theme-picker .input {
+		background: #fafafa;
+		border: 1px solid darken(#fafafa, 2%);
+		color: #333;
+	}
+}
+
+.name-type {
+	margin-top: -12px;
+
+	.CodeMirror .CodeMirror-scroll {
+		overflow: hidden !important;
+		margin: 0;
+		padding: 0;
+	}
+
+	.CodeMirror {
+	  -webkit-box-shadow: none;
+	  -moz-box-shadow: none;
+	  box-shadow: none;
 	}
 }
 
@@ -100,6 +166,8 @@ select[name="theme-picker"] option {
 	text-align: center;
 	padding: 0 4px 0 5px;
 }
+
+
 
 .cm-s-monokai{
 

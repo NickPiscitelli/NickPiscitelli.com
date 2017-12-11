@@ -1,9 +1,11 @@
 var myName = "Nick Piscitelli";
-var scrollWidth = 5;
-var gutterWidth = 3.5; // This is half of the width
+var scrollWidth = 0;
+var editorGutterWidth = 0;
 var typeInterval;
-var selectedTheme = 'monokai';
-var selectedFile = 'index';
+
+// Defaults
+var activeTheme = 'ambiance';
+var activeFile = 'index';
 
 var themes = [
   "3024-day",
@@ -61,13 +63,13 @@ for (var i = 0; i < themes.length; ++i){
   var $option = document.createElement("option");
   $option.value = themes[i];
   $option.text = themes[i].replace(/-/g, ' ');
-  if (themes[i] === selectedTheme){
+  if (themes[i] ===  activeTheme){
     $option.selected = "selected";
   }
   $select.add($option)
 }
 // Set active theme as selected
-$select.value = selectedTheme;
+$select.value =  activeTheme;
 
 ready(function(){
 
@@ -78,8 +80,10 @@ ready(function(){
   var $firstName = $('#name-type');
   $firstName.CodeMirror = CodeMirror($firstName, {
     mode:  "javascript",
+    scrollbarStyle: "null",
+    lineWrapping: true,
   });
-  $firstName.CodeMirror.setSize(200, 25);
+  $firstName.CodeMirror.setSize(350, 25);
 
   
 
@@ -92,12 +96,12 @@ ready(function(){
   var $leftCode = $('#left-code-pad');
   $leftCode.CodeMirror = CodeMirror($leftCode, {
     mode:  "javascript",
-    theme: "monokai",
+    theme:  activeTheme,
     lineNumbers: true,
     scrollbarStyle: "overlay"
   });
   $leftCode.CodeMirror.setSize(
-    (viewportDimensions.w / 2) - gutterWidth - scrollWidth,
+    (viewportDimensions.w / 2) - (editorGutterWidth / 2) - scrollWidth,
     viewportDimensions.h - $mainNav.offsetHeight
   );
 
@@ -113,7 +117,7 @@ ready(function(){
     value: "",
     mode:  "htmlmixed",
     htmlMode: true,
-    theme: "monokai",
+    theme:  activeTheme,
     lineNumbers: true,
     scrollbarStyle: "overlay"
   });
@@ -125,16 +129,16 @@ ready(function(){
     }
   });
 
-  console.log($('.tabs').offsetHeight);
-
   $rightCode.CodeMirror.setSize(
-    (viewportDimensions.w / 2) - gutterWidth - scrollWidth,
+    (viewportDimensions.w / 2) - (editorGutterWidth / 2) - scrollWidth,
     viewportDimensions.h - $mainNav.offsetHeight - $('.tabs').offsetHeight
   );
 
-  $("select[name='theme-picker']").addEventListener('change',updateTheme);
+  $("select[name='theme-picker']").addEventListener('change',function(){
+    updateTheme(this.value);
+  });
 
-  $$(".tabs li").forEach(function(elem) {
+  $$(".tabs .tab").forEach(function(elem) {
     elem.addEventListener("click", function() {
       var 
           tab = this
@@ -144,7 +148,7 @@ ready(function(){
       if (!active){
         var components = file.split('.');
         file = components[0];
-        if (file !== selectedFile){
+        if (file !== activeFile){
           getFile({
             file: file,
             success: function(data){
@@ -152,11 +156,12 @@ ready(function(){
               $('#right-code-pad').CodeMirror.setValue(data.content);
               $('#right-code-pad').CodeMirror.setOption("mode", data.mode);
 
-              $$(".tabs li").forEach(function(elem) {
-                elem.className = '';
+              $$(".tabs .tab").forEach(function(elem) {
+                elem.className = elem.className.replace(/\bactive\b/,' ');
               });
-              tab.className = 'active';
-              selectedFile = file;
+              tab.className += ' active';
+              setActiveTab();
+              activeFile = file;
             }
           });
         }
@@ -165,20 +170,20 @@ ready(function(){
     });
   });
 
-  new Siema({
-    selector: '.siema',
-    duration: 200,
-    easing: 'ease-out',
-    perPage: 1,
-    startIndex: 0,
-    draggable: false,
-    threshold: 20,
-    loop: true,
-    onInit: () => {},
-    onChange: () => {},
-  });
+  //new Siema({
+  //  selector: '.siema',
+  //  duration: 200,
+  //  easing: 'ease-out',
+  //  perPage: 1,
+  //  startIndex: 0,
+  //  draggable: false,
+  //  threshold: 20,
+  //  loop: true,
+  //  onInit: () => {},
+  //  onChange: () => {},
+  //});
 
-  syncWithTheme();
+  updateTheme(activeTheme);
 });
 
 function getFile(opt){
@@ -216,8 +221,9 @@ function typeLetter(editor, letter){
     editor.focus();
     editor.setCursor({
       line: 1,
-      ch: myName.length + 1
+      ch: myName.length - 1
     });
+    $('.name-type').style.marginTop = '-4px';
     clearInterval(typeInterval);
   }
 }
@@ -290,19 +296,19 @@ function localSet(key, data, minutes){
   return true;
 }
 
+function getThemeColor(){
+  return tinycolor(getComputedStyle($('.editor .CodeMirror')).backgroundColor)
+}
+
 function syncWithTheme(){
   var
-    background = getComputedStyle($('.editor .CodeMirror')).backgroundColor,
-    backgroundColor = tinycolor(background);
+    backgroundColor = getThemeColor();
 
   var textColor = tinycolor(backgroundColor.isLight() ? '#000' : '#fff');
 
-  var activeTab = $('.tabs .active');
-  activeTab.style.backgroundColor = background;
-  activeTab.style.color = textColor;
-
   var tabs = $('.tabs');
-  tabs.style.backgroundColor = backgroundColor.lighten(5);
+  tabs.style.backgroundColor = backgroundColor.isLight() ?
+    backgroundColor.clone().darken(5) : backgroundColor.clone().lighten(5);
   tabs.style.color = backgroundColor.isLight() ?
     textColor.clone().lighten(25) : textColor.clone().darken(25);
 
@@ -311,20 +317,36 @@ function syncWithTheme(){
     backgroundColor.clone().lighten(5) : backgroundColor.clone().darken(5);
 
   var light = backgroundColor.isLight();
-  mainNav.className = mainNav.className.replace(light ? 'dark' : 'light', '');
-  mainNav.className += ' ' + (light ? 'light' : 'dark');
+  document.body.className = document.body.className.replace(/\blight\b/, ' ');
+  document.body.className += ' ' + (light ? 'light' : '');
 
+  setActiveTab(backgroundColor);
 }
 
-function updateTheme(){
+function setActiveTab(color){
+  if (!color) color = getThemeColor();
+
+  $$('.tabs .tab').forEach(function(e){
+    e.style.backgroundColor = 'inherit';
+    e.style.color = 'inherit';
+  });
+
+  var textColor = tinycolor(color.isLight() ? '#000' : '#fff');
+  var activeTab = $('.tabs .active');
+  activeTab.style.backgroundColor = color;
+  activeTab.style.color = textColor;
+}
+ 
+function updateTheme(theme){
+
   var $link = $('#theme-link'),
     href = $link.href;
 
-  $link.href = href.replace(new RegExp(selectedTheme), this.value);
+  $link.href = href.replace(new RegExp( activeTheme), theme);
 
-  selectedTheme = this.value;
-  $('#left-code-pad').CodeMirror.setOption("theme", selectedTheme);
-  $('#right-code-pad').CodeMirror.setOption("theme", selectedTheme);
+   activeTheme = theme;
+  $('#left-code-pad').CodeMirror.setOption("theme", theme);
+  $('#right-code-pad').CodeMirror.setOption("theme", theme);
   
   // Make sure computed style has updated
   setTimeout(function(){

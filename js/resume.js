@@ -18,7 +18,7 @@ pickyKnee.setObjective("Obtain a challenging and motivating position.")
 pickyKnee.setLanguages([
   {
     name: "JavaScript",
-    mastery: "Ninja",
+    mastery: "Aspiring Ninja",
     experience: new Years(7)
   },
   {

@@ -71,47 +71,46 @@ $select.value = selectedTheme;
 
 ready(function(){
 
-  var vp = viewport();
-  var $mainNav = $('#mainNav');
+  var
+      viewportDimensions = viewport(),
+      $mainNav = $('#main-nav');
 
-  var $firstName = $('#nameType');
-  $firstName['codeMirror'] = CodeMirror($firstName, {
+  var $firstName = $('#name-type');
+  $firstName.CodeMirror = CodeMirror($firstName, {
     mode:  "javascript",
   });
-  $firstName['codeMirror'].setSize(200, 25);
+  $firstName.CodeMirror.setSize(200, 25);
 
   
-  typeInterval = setInterval(typeName, 250);
+
+  hackerType({
+    editor: $firstName.CodeMirror,
+    text: "Nick Piscitelli"
+  });
 
 
-
-  var $leftCode = $('#leftCode');
-  $leftCode['codeMirror'] = CodeMirror($leftCode, {
+  var $leftCode = $('#left-code-pad');
+  $leftCode.CodeMirror = CodeMirror($leftCode, {
     mode:  "javascript",
     theme: "monokai",
     lineNumbers: true,
     scrollbarStyle: "overlay"
   });
-  $leftCode['codeMirror'].setSize((vp.w / 2) - gutterWidth - scrollWidth, vp.h - $mainNav.offsetHeight)
+  $leftCode.CodeMirror.setSize(
+    (viewportDimensions.w / 2) - gutterWidth - scrollWidth,
+    viewportDimensions.h - $mainNav.offsetHeight
+  );
 
-  ajax({
-    url: 'files.php?file=resume',
+  getFile({
+    file: 'resume',
     success: function(data){
-      data = JSON.parse(data);
-      $('#leftCode')['codeMirror'].setValue(data['content']);
+      $('#left-code-pad').CodeMirror.setValue(data.content);
     }
   });
 
-  var $rightCode = $('#rightCode');
-  var html = $('html').cloneNode(true);
-  html.querySelector('#leftCode').innerHTML = '';
-  html.querySelector('#rightCode').innerHTML = '';
-  html.querySelector('#nameType').innerHTML = '';
-  html = html.outerHTML;
-  html = html.replace('<style></style></head>', '</head>');
-  html = html.replace('<html><head>', '<html>\n<head>');
-  $rightCode['codeMirror'] = CodeMirror($rightCode, {
-    value: html,
+  var $rightCode = $('#right-code-pad');
+  $rightCode.CodeMirror = CodeMirror($rightCode, {
+    value: "",
     mode:  "htmlmixed",
     htmlMode: true,
     theme: "monokai",
@@ -119,18 +118,21 @@ ready(function(){
     scrollbarStyle: "overlay"
   });
 
-  $rightCode['codeMirror'].setSize((vp.w / 2) - gutterWidth - scrollWidth, vp.h - $mainNav.offsetHeight)
-
-  $("select[name='theme-picker']").addEventListener('change',function(e){
-    var $link = $('#themeLink'),
-        href = $link.href;
-
-    $link.href = href.replace(new RegExp(selectedTheme), this.value);
-
-    selectedTheme = this.value;
-    $('#leftCode')['codeMirror'].setOption("theme", selectedTheme);
-    $('#rightCode')['codeMirror'].setOption("theme", selectedTheme);
+  getFile({
+    file: 'index',
+    success: function(data){
+      $rightCode.CodeMirror.setValue(data.content);
+    }
   });
+
+  console.log($('.tabs').offsetHeight);
+
+  $rightCode.CodeMirror.setSize(
+    (viewportDimensions.w / 2) - gutterWidth - scrollWidth,
+    viewportDimensions.h - $mainNav.offsetHeight - $('.tabs').offsetHeight
+  );
+
+  $("select[name='theme-picker']").addEventListener('change',updateTheme);
 
   $$(".tabs li").forEach(function(elem) {
     elem.addEventListener("click", function() {
@@ -141,37 +143,74 @@ ready(function(){
 
       if (!active){
         var components = file.split('.');
-        file = encodeURIComponent(components[0]);
+        file = components[0];
         if (file !== selectedFile){
-          ajax({
-            url: 'files.php?file='+file,
+          getFile({
+            file: file,
             success: function(data){
-              
-              data = JSON.parse(data);
 
-              $('#rightCode')['codeMirror'].setValue(data['content']);
-              $('#rightCode')['codeMirror'].setOption("mode", data['mode']);
+              $('#right-code-pad').CodeMirror.setValue(data.content);
+              $('#right-code-pad').CodeMirror.setOption("mode", data.mode);
 
               $$(".tabs li").forEach(function(elem) {
                 elem.className = '';
               });
               tab.className = 'active';
-              selectedFile = file
+              selectedFile = file;
             }
-          })
+          });
         }
       }
 
     });
   });
+
+  new Siema({
+    selector: '.siema',
+    duration: 200,
+    easing: 'ease-out',
+    perPage: 1,
+    startIndex: 0,
+    draggable: false,
+    threshold: 20,
+    loop: true,
+    onInit: () => {},
+    onChange: () => {},
+  });
+
+  syncWithTheme();
 });
 
-function typeName(){
-  var editor = $('#nameType')['codeMirror'];
-  editor['nameIndex'] = editor['nameIndex'] || 0;
-  var index = editor['nameIndex']++;
-  if (index + 1 <= myName.length){
-    editor.setValue(editor.getValue() + myName[index]);
+function getFile(opt){
+  var obj = localGet(opt.file);
+  if (obj){
+    typeof opt.success === 'function' && opt.success(obj);
+    return obj;
+  } else {
+    opt.file = encodeURIComponent(opt.file);
+    ajax({
+      url: 'files.php?file='+opt.file,
+      success: function(data){
+        data = JSON.parse(data)
+        localSet(opt.file, data);
+        typeof opt.success === 'function' && opt.success(data);
+      }
+    });
+  }
+}
+
+function hackerType(opt){
+  opt.text = opt.text.split("");
+  var counter = 0;
+  typeInterval = setInterval(function(){
+    typeLetter(opt.editor, opt.text[counter++]);
+  }, 250);
+}
+
+function typeLetter(editor, letter){
+  var index = editor.nameIndex++;
+  if (letter && letter.length){
+    editor.setValue(editor.getValue() + letter);
   }
   else {
     editor.focus();
@@ -228,4 +267,67 @@ function ajax(opt){
     opt.error : function() {};
 
   request.send();
+}
+
+function localGet(key){
+  var record = JSON.parse(localStorage.getItem(key)); 
+  if (record){
+    if (record.timestamp > new Date().getTime()){
+      return JSON.parse(record.value);
+    } else {
+      localStorage.removeItem(key);
+    }
+  }
+  return undefined;
+}
+
+function localSet(key, data, minutes){
+  var expiration = (minutes || 20) * 60 * 1000;
+  localStorage.setItem(key, JSON.stringify({
+    value: JSON.stringify(data),
+    timestamp: new Date().getTime() + expiration
+  }));
+  return true;
+}
+
+function syncWithTheme(){
+  var
+    background = getComputedStyle($('.editor .CodeMirror')).backgroundColor,
+    backgroundColor = tinycolor(background);
+
+  var textColor = tinycolor(backgroundColor.isLight() ? '#000' : '#fff');
+
+  var activeTab = $('.tabs .active');
+  activeTab.style.backgroundColor = background;
+  activeTab.style.color = textColor;
+
+  var tabs = $('.tabs');
+  tabs.style.backgroundColor = backgroundColor.lighten(5);
+  tabs.style.color = backgroundColor.isLight() ?
+    textColor.clone().lighten(25) : textColor.clone().darken(25);
+
+  var mainNav = $('#main-nav');
+  mainNav.style.backgroundColor = backgroundColor.isLight() ?
+    backgroundColor.clone().lighten(5) : backgroundColor.clone().darken(5);
+
+  var light = backgroundColor.isLight();
+  mainNav.className = mainNav.className.replace(light ? 'dark' : 'light', '');
+  mainNav.className += ' ' + (light ? 'light' : 'dark');
+
+}
+
+function updateTheme(){
+  var $link = $('#theme-link'),
+    href = $link.href;
+
+  $link.href = href.replace(new RegExp(selectedTheme), this.value);
+
+  selectedTheme = this.value;
+  $('#left-code-pad').CodeMirror.setOption("theme", selectedTheme);
+  $('#right-code-pad').CodeMirror.setOption("theme", selectedTheme);
+  
+  // Make sure computed style has updated
+  setTimeout(function(){
+    syncWithTheme();
+  }, 0);
 }

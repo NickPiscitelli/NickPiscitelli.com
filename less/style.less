@@ -2,7 +2,6 @@
 @import 'include/clearfix.less';
 @import 'include/helpers.less';
 @import 'include/editor_tabs.less';
-@import (css) '../js/codemirror/addon/scroll/simplescrollbars.css';
 
 html, body {
 	font-family: 'Roboto Mono', monospace;
@@ -28,7 +27,7 @@ html, body {
 	color: lightblue;
 }
 
-.mainNav {
+.main-nav {
 	-webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
@@ -59,22 +58,21 @@ select[name="theme-picker"] option {
 	text-transform: capitalize;
 }
 
-.codeContent {
+.code-content {
 	display: none;
 }
 
-.nameType {
-	background: #fafafa;
+.name-type {
 	flex: 1;
 }
 
-.fastForwardContain {
+.fast-forward-contain {
 	display: flex;
 	flex: 1;
 }
 
-.fastForwardContain button {
-	background: #fafafa;
+.fast-forward-contain button {
+	background: transparent;
   border: none;
   cursor: pointer;
   fill: #424242;
@@ -83,6 +81,19 @@ select[name="theme-picker"] option {
   padding: 0;
   width: 40px;
   flex: 1;
+}
+
+#name-type .CodeMirror .cm-variable {
+	.light & {
+		color: #000;
+	}
+	.dark & {
+		color: #fff;
+	}
+}
+
+.CodeMirror.cm-s-default {
+	background: transparent;
 }
 
 .CodeMirror-linenumber {
@@ -109,7 +120,7 @@ select[name="theme-picker"] option {
 
 }
 
-.fastForwardContain svg {
+.fast-forward-contain svg {
 	height: 40px;
 	width: 40px;
 }

@@ -17,7 +17,12 @@ $file_map = array(
 	'resume' => array(
 		file => 'js/resume.js',
 		type => 'javascript',
+	),
+	'editor_tabs' => array(
+		file => 'less/include/editor_tabs.less',
+		type => "text/x-less",
 	)
+
 );
 
 $request = $_GET['file'];
